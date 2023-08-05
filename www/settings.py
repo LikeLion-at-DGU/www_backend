@@ -48,6 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
+    'rest_framework',
+    'Archive',
+    'Discussion',
+    'Record',
+=======
 
     'django.contrib.sites',
     # my app
@@ -64,6 +70,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+>>>>>>> 7caececa06d6345b85f04aa31409566828b564eb
 ]
 
 SITE_ID = 1
