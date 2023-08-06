@@ -48,18 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
+    'django.contrib.sites',
+    # my app
     'rest_framework',
     'Archive',
     'Discussion',
     'Record',
-=======
-
-    'django.contrib.sites',
-    # my app
     'accounts',
     # django-rest-auth
-    'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
     # dj-rest-auth
@@ -70,7 +66,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
->>>>>>> 7caececa06d6345b85f04aa31409566828b564eb
 ]
 
 SITE_ID = 1
