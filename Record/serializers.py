@@ -15,7 +15,7 @@ class RCommentSerializer(serializers.ModelSerializer):
     record = serializers.SerializerMethodField()
 
     def get_record(self, instance):
-        return instance.record.name
+        return instance.record.title
 
     class Meta:
         model = RComment

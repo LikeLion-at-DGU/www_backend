@@ -44,7 +44,7 @@ class User(AbstractUser):
     nickname = models.CharField(unique=True, max_length=10)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['country','ciry', 'nickname']
+    REQUIRED_FIELDS = ['country','city', 'nickname']
 
     objects = UserManager()
 
