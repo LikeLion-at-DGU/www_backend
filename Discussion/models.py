@@ -1,23 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
+def image_upload_path(instance, filename):
+    return f'{instance.pk}/{filename}'
 
-# Daily Record 글
+# Discussion 글
 class Discussion(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=50)
-    writer = models.ForeignKey(User, on_delete = models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
 
-# 투표 항목
+# 글에 대한 투표 항목
 class Choice(models.Model):
-    # 여기 이제 discussion 하고 일대다 연결 필드 -> comment 보고 결정 이름
+    id = models.AutoField(primary_key=True)
+    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices")
     vote_item = models.CharField(max_length=30)
     count = models.IntegerField(default=0)
 
 # Discussion 댓글
 class Comment(models.Model):
-    record = models.ForeignKey(Discussion, on_delete = models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    discussion = models.ForeignKey(Discussion, on_delete = models.CASCADE, related_name="comments")
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     content = models.TextField(blank = False, null = False)
-    writer = models.ForeignKey(User, on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

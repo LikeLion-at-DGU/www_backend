@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 # Daily Record 태그
@@ -13,7 +14,7 @@ class Record(models.Model):
     title = models.CharField(max_length=50)
     weather = models.CharField(max_length=50)
     body = models.TextField(max_length=200)
-    writer = models.ForeignKey(User, on_delete = models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.ManyToManyField(Tag, blank=True)
@@ -22,4 +23,4 @@ class Record(models.Model):
 class RComment(models.Model):
     record = models.ForeignKey(Record, on_delete = models.CASCADE)
     content = models.TextField(blank = False, null = False)
-    writer = models.ForeignKey(User, on_delete = models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
