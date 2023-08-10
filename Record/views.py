@@ -4,6 +4,7 @@ from .serializers import RecordSerializer, RecordListSerializer, RCommentSeriali
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import action
 
 #1. RECORD 글 작성 기능
 class RecordViewSet(viewsets.ModelViewSet):
@@ -13,7 +14,7 @@ class RecordViewSet(viewsets.ModelViewSet):
             return RecordListSerializer
         return RecordSerializer
     
-    # 태그 작성
+    #1-1. 태그 작성
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -24,7 +25,7 @@ class RecordViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
     
-    # 태그 작성 (2)
+    #1-2. 태그 작성 (2)
     def handle_tags(self, record):
         words = record.body.split(' ')
         tag_list = []
@@ -38,11 +39,20 @@ class RecordViewSet(viewsets.ModelViewSet):
 
         record.save()
 
-    # 수정 함수 구현
+    #1-3. 수정 함수 구현
     def perform_update(self, serializer):
         record = serializer.save()
         record.tag.clear()
         self.handle_tags(record)
+
+    #1-4. 좋아요 기능 구현 (요청마다 views 필드 수정하기)
+    @action(methods=["GET"], detail=True)
+    def record_like(self, request, pk=None):
+        like_record = self.get_object()
+        like_record.likes += 1
+        like_record.save(update_fields=["likes"])
+        return Response()
+
 
 #2. RComment 디테일 조회 수정 삭제 기능
 class RCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
