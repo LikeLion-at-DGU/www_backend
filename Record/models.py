@@ -18,6 +18,8 @@ class Record(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     tag = models.ManyToManyField(Tag, blank=True)
+    # 조회수
+    views = models.PositiveSmallIntegerField(default=0)
 
 # Daily Record 댓글
 class RComment(models.Model):
