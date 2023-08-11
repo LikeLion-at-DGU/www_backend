@@ -19,10 +19,11 @@ class Choice(models.Model):
     id = models.AutoField(primary_key=True)
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices")
     vote_item = models.CharField(max_length=30)
-    count = models.IntegerField(default=0)
+    voted_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    cnt = models.IntegerField(default=0)
 
 # Discussion 댓글
-class Comment(models.Model):
+class DComment(models.Model):
     id = models.AutoField(primary_key=True)
     discussion = models.ForeignKey(Discussion, on_delete = models.CASCADE, related_name="comments")
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
