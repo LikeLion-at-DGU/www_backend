@@ -20,6 +20,8 @@ class Record(models.Model):
     tag = models.ManyToManyField(Tag, blank=True)
     # 조회수
     views = models.PositiveSmallIntegerField(default=0)
+    # 좋아요
+    likes = models.PositiveSmallIntegerField(default=0)
 
 # Daily Record 댓글
 class RComment(models.Model):

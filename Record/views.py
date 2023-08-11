@@ -52,12 +52,22 @@ class RecordViewSet(viewsets.ModelViewSet):
         like_record.likes += 1
         like_record.save(update_fields=["likes"])
         return Response()
+    
+    #1-5. 조회수 기능 (views)
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.views += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 #2. RComment 디테일 조회 수정 삭제 기능
 class RCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     queryset = RComment.objects.all()
     serializer_class = RCommentSerializer
+
+
 
 #3. Record 글에 있는 댓글 목록 조회, Record 게시물에 댓글 작성
 class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):

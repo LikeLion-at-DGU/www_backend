@@ -8,7 +8,7 @@ class RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
         fields = "__all__"
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at','views']
 
 
 class RCommentSerializer(serializers.ModelSerializer):
