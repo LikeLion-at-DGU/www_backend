@@ -22,6 +22,13 @@ class Record(models.Model):
     views = models.PositiveSmallIntegerField(default=0)
     # 좋아요
     likes = models.PositiveSmallIntegerField(default=0)
+    # 사진들을 저장할 ManyToMany 필드
+    photos = models.ManyToManyField('Record_Photo', related_name='Record_Photo', blank=True)
+
+# Record 사진
+class Record_Photo(models.Model):
+    image = models.ImageField(upload_to='record_photos/')
+
 
 # Daily Record 댓글
 class RComment(models.Model):

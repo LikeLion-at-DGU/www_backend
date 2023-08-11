@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 from .views import RecordViewSet, RCommentViewSet, RecordRCommentViewSet
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = "Record"
 
@@ -21,4 +23,4 @@ urlpatterns = [
     path("", include(record_router.urls)), #1. RECORD 글 작성
     path("", include(rcomment_router.urls)), #2. RComment 디테일 조회 수정 삭제
     path("records/<int:record_id>/", include(record_rcomment_router.urls)), #3. Record 게시물에 있는 댓글 목록 조회, 게시물에 댓글 작성
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
