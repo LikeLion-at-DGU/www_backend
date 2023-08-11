@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
+from datetime import datetime
 
 def image_upload_path(instance, filename):
     return f'{instance.pk}/{filename}'
@@ -17,7 +19,8 @@ class Discussion(models.Model):
 # 글에 대한 투표 항목
 class Choice(models.Model):
     id = models.AutoField(primary_key=True)
-    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices")
+    # discussion -> default = ' ', null = True (추가)
+    discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices", default='', null=True)
     vote_item = models.CharField(max_length=30)
     voted_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     cnt = models.IntegerField(default=0)
@@ -25,8 +28,10 @@ class Choice(models.Model):
 # Discussion 댓글
 class DComment(models.Model):
     id = models.AutoField(primary_key=True)
-    discussion = models.ForeignKey(Discussion, on_delete = models.CASCADE, related_name="comments")
+    # discussion -> default = ' ', null = True (추가)
+    discussion = models.ForeignKey(Discussion, on_delete = models.CASCADE, related_name="comments", default='', null=True)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     content = models.TextField(blank = False, null = False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at -> default=datetime.now()로 수정했음!! (migrate 오류)
+    created_at = models.DateTimeField(default=datetime.now())
     updated_at = models.DateTimeField(auto_now=True)
