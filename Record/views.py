@@ -101,9 +101,11 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+    #4-1
     def create(self, request, record_id=None):
         record = get_object_or_404(Record, id=record_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(record=record)
         return Response(serializer.data)
+    
