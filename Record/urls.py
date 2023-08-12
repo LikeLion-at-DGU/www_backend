@@ -23,6 +23,7 @@ card_router = routers.SimpleRouter()
 card_router.register("cards", CardViewSet, basename="cards")
 
 
+
 urlpatterns = [
     path("", include(record_router.urls)), #1. RECORD 글 작성
     path("", include(rcomment_router.urls)), #2. RComment 디테일 조회 수정 삭제
