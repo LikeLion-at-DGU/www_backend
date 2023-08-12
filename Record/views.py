@@ -1,5 +1,5 @@
-from .models import Record, RComment, Tag
-from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer
+from .models import Record, RComment, Tag, Card
+from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer
 
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
@@ -74,6 +74,27 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
     queryset = RComment.objects.all()
     serializer_class = RCommentSerializer
 
+    def list(self, request, record_id=None):
+        record = get_object_or_404(Record, id=record_id)
+        queryset = self.filter_queryset(self.get_queryset().filter(record=record))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request, record_id=None):
+        record = get_object_or_404(Record, id=record_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(record=record)
+        return Response(serializer.data)
+    
+
+    
+#4. Record와 연결된 Card 목록 조회, Card 작성
+class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+
+    # 아래 코드는 댓글이랑 똑같...음...왤까??? 이게 맞나????
     def list(self, request, record_id=None):
         record = get_object_or_404(Record, id=record_id)
         queryset = self.filter_queryset(self.get_queryset().filter(record=record))
