@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    # cors-headers
+    'corsheaders',
 ]
 
 SITE_ID = 1
@@ -112,6 +114,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 
@@ -122,7 +125,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # 'www_frontend/dist'
-            os.path.join(BASE_DIR, 'www_frontend/build')
+            # os.path.join(BASE_DIR, 'www_frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -194,6 +197,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'www_frontend/build/assets')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'www_frontend/build/assets')
+# ]
+
+# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+	# 허용할 Origin 추가
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
 ]
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:5173','http://localhost:3000','http://localhost:5173']
