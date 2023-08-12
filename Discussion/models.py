@@ -22,7 +22,7 @@ class Choice(models.Model):
     # discussion -> default = ' ', null = True (추가)
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices", default='', null=True)
     vote_item = models.CharField(max_length=30)
-    voted_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    voted_user = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     cnt = models.IntegerField(default=0)
 
 # Discussion 댓글
