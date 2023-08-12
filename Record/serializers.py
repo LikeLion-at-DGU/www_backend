@@ -4,11 +4,18 @@ from .models import *
 
 
 class RecordSerializer(serializers.ModelSerializer):
-    
+    record_comments = serializers.SerializerMethodField(read_only=True)
+
+    # Record 모델에 댓글이 없으니깐....댓글도 가져오기
+    def get_record_comments(self, instance):
+        serializer = RCommentSerializer(instance.rcomments, many=True)
+        return serializer.data
+
     class Meta:
         model = Record
         fields = "__all__"
-        read_only_fields = ['id', 'created_at', 'updated_at', 'views']
+        # 작성 안해주고 읽기만 해주는 필드
+        read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'likes',]
 
     image = serializers.ImageField(use_url=True, required=False)
 
@@ -24,22 +31,28 @@ class RCommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['record']
 
-class RecordListSerializer(serializers.ModelSerializer):
-    comments_cnt = serializers.SerializerMethodField()
 
-    def get_comments_cnt(self, instance):
-        return instance.comments.count()
+# Record List
+class RecordListSerializer(serializers.ModelSerializer):
+    rcomments_cnt = serializers.SerializerMethodField()
+
+    def get_rcomments_cnt(self, instance):
+        return instance.rcomments.count()
     
     class Meta:
         model = Record
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "comments_cnt",
-            "title",
-            "weather",
-            "body",
-            "writer",
-        ]
-        read_only_fields = ["id", "created_at", "updated_at", "comments_cnt"]
+        fields = '__all__'
+        read_only_fields = ["id", "created_at", "updated_at", "rcomments_cnt"]
+
+
+# Card 시리얼라이저
+class CardSerializer(serializers.ModelSerializer):
+    record = serializers.SerializerMethodField()
+
+    def get_record(self, instance):
+        return instance.record.title
+
+    class Meta:
+        model = Card
+        fields = '__all__'
+        read_only_fields = ['record']

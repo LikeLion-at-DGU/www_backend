@@ -32,6 +32,18 @@ class Record_Photo(models.Model):
 
 # Daily Record 댓글
 class RComment(models.Model):
-    record = models.ForeignKey(Record, on_delete = models.CASCADE)
+    record = models.ForeignKey(Record, on_delete = models.CASCADE, related_name = "rcomments")
     content = models.TextField(blank = False, null = False)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+
+
+# Card 모델
+class Card(models.Model):
+    id = models.AutoField(primary_key=True)
+    record = models.ForeignKey(Record, on_delete = models.CASCADE) # Record 글과 ForeignKey 연결
+    where = models.CharField(max_length=80)
+    what = models.CharField(max_length=100)
+    how = models.CharField(max_length=100)
+    card_photo_1 = models.ImageField(upload_to='record_photos/')
+    card_photo_2 = models.ImageField(upload_to='record_photos/')
+    card_photo_3 = models.ImageField(upload_to='record_photos/')
