@@ -12,7 +12,7 @@ class CompanionViewSet(viewsets.ModelViewSet):
     queryset = Companion.objects.all()
     serializer_class = CompanionSerializer
 
-    @action(methods=['GET'], detail=True)
+    @action(methods=['POST'], detail=True)
     def like(self, request, pk=None):
         like_companion = self.get_object()
         if request.user in like_companion.like.all():
@@ -37,12 +37,16 @@ class CompanionViewSet(viewsets.ModelViewSet):
     #     instance.comments_count = instance.comments.count()
     #     instance.save()
 
-class CompanionCommentViewSet(viewsets.ModelViewSet):
+class CompanionCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     serializer_class = CoCommentSerializer
     def get_queryset(self):
         companion = self.kwargs.get('companion_id')
         queryset = CoComment.objects.filter(companion_id = companion)
         return queryset
+
+class CommentViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
+    serializer_class = CoCommentSerializer
+    queryset = CoComment.objects.all()
     
     @action(methods=['POST'], detail=True)
     def like(self, request, pk=None):

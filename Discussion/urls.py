@@ -20,8 +20,9 @@ discussion_choice_router = routers.SimpleRouter()
 discussion_choice_router.register('choices', DiscussionChoiceViewSet, basename="choices")
 
 
+
 urlpatterns = [
     path('', include(dicussion_router.urls)),
     path('discussions/<int:discussion_id>/', include(discsusion_comment_router.urls)),
-    path('discussions/<int:discussion_id>/', include(discussion_choice_router.urls)),
+    path('', include(discussion_choice_router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
