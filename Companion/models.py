@@ -19,7 +19,6 @@ class Companion(models.Model):
     city = models.CharField(max_length=10)
     # 그 외 field
     views = models.PositiveIntegerField(default=0)
-    comments_count = models.PositiveIntegerField(default=0)
     like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='likes', blank=True)
     like_count = models.PositiveIntegerField(default=0)
     
