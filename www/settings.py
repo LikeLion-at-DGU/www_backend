@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'Discussion',
     'Record',
     'accounts',
+    'Companion',
     # django-rest-auth
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
@@ -119,7 +120,10 @@ ROOT_URLCONF = 'www.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # 'www_frontend/dist'
+            os.path.join(BASE_DIR, 'www_frontend/build')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -189,3 +193,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR)
+]
