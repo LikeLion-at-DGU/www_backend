@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 
-# Daily Record 태그
+# Card 태그
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
@@ -17,7 +17,6 @@ class Record(models.Model):
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tag = models.ManyToManyField(Tag, blank=True)
     # 조회수
     views = models.PositiveSmallIntegerField(default=0)
     # 좋아요
@@ -44,6 +43,11 @@ class Card(models.Model):
     where = models.CharField(max_length=80)
     what = models.CharField(max_length=100)
     how = models.CharField(max_length=100)
+    # Card 태그를 입력하는 창(?)
+    tag_field = models.CharField(max_length=80, default=0, null=True)
+    # Card 태그
+    tag = models.ManyToManyField(Tag, blank=True)
+    # Card 사진
     card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
     card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
     card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
