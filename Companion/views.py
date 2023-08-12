@@ -43,6 +43,13 @@ class CompanionCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mi
         companion = self.kwargs.get('companion_id')
         queryset = CoComment.objects.filter(companion_id = companion)
         return queryset
+    
+    def create(self, request, companion_id=None):
+        companion = get_object_or_404(Companion, id=companion_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(companion=companion)
+        return Response(serializer.data)
 
 class CommentViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
     serializer_class = CoCommentSerializer
