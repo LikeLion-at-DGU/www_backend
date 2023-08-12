@@ -4,11 +4,19 @@ from .models import *
 
 
 class RecordSerializer(serializers.ModelSerializer):
+    # Record 댓글 가져오기
     record_comments = serializers.SerializerMethodField(read_only=True)
+    # Record 카드 가져오기
+    record_cards = serializers.SerializerMethodField(read_only=True)
 
     # Record 모델에 댓글이 없으니깐....댓글도 가져오기
     def get_record_comments(self, instance):
         serializer = RCommentSerializer(instance.rcomments, many=True)
+        return serializer.data
+    
+    # Record 모델에 카드가 없으니깐....카드도 가져오기
+    def get_record_cards(self, instance):
+        serializer = CardSerializer(instance.cards, many=True)
         return serializer.data
 
     class Meta:

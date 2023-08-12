@@ -40,10 +40,10 @@ class RComment(models.Model):
 # Card 모델
 class Card(models.Model):
     id = models.AutoField(primary_key=True)
-    record = models.ForeignKey(Record, on_delete = models.CASCADE) # Record 글과 ForeignKey 연결
+    record = models.ForeignKey(Record, on_delete = models.CASCADE, related_name = "cards") # Record 글과 ForeignKey 연결
     where = models.CharField(max_length=80)
     what = models.CharField(max_length=100)
     how = models.CharField(max_length=100)
-    card_photo_1 = models.ImageField(upload_to='record_photos/')
-    card_photo_2 = models.ImageField(upload_to='record_photos/')
-    card_photo_3 = models.ImageField(upload_to='record_photos/')
+    card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
+    card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
+    card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
