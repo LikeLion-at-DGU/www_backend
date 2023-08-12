@@ -1,4 +1,4 @@
-from .models import Record, RComment, Tag, Card
+from .models import Record, RComment, Card, Tag
 from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer
 
 from rest_framework import viewsets, mixins
@@ -21,23 +21,24 @@ class RecordViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
 
         record = serializer.instance
-        self.handle_tags(record)
+        
+        # self.handle_tags(record)
 
         return Response(serializer.data)
     
-    #1-2. 태그 작성 (2)
-    def handle_tags(self, record):
-        words = record.body.split(' ')
-        tag_list = []
-        for w in words:
-            if w[0] == '#':
-                tag_list.append(w[1:])
+    # 1-2. 태그 작성 (2)
+    # def handle_tags(self, record):
+    #     words = record.body.split(' ')
+    #     tag_list = []
+    #     for w in words:
+    #         if w[0] == '#':
+    #             tag_list.append(w[1:])
 
-        for t in tag_list:
-            tag, created = Tag.objects.get_or_create(name=t)
-            record.tag.add(tag)
+    #     for t in tag_list:
+    #         tag, created = Tag.objects.get_or_create(name=t)
+    #         record.tag.add(tag)
 
-        record.save()
+    #     record.save()
 
     #1-3. 수정 함수 구현
     def perform_update(self, serializer):
@@ -106,6 +107,26 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
         record = get_object_or_404(Record, id=record_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
+        # 태그 작성 (1)
+        self.perform_create(serializer)
+
+        card = serializer.instance
+        self.handle_tags(card)
+
         serializer.save(record=record)
         return Response(serializer.data)
     
+    #4-2. 태그 작성(2)
+    def handle_tags(self, card):
+        words = card.tag_field.split(' ')
+        tag_list = []
+        for w in words:
+            if w[0] == '#':
+                tag_list.append(w[1:])
+
+        for t in tag_list:
+            tag, created = Tag.objects.get_or_create(name=t)
+            card.tag.add(tag)
+
+        card.save()
