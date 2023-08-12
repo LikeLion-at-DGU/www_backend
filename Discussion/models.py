@@ -22,7 +22,7 @@ class Choice(models.Model):
     # discussion -> default = ' ', null = True (추가)
     discussion = models.ForeignKey(Discussion, on_delete=models.CASCADE, related_name="choices", default='', null=True)
     vote_item = models.CharField(max_length=30)
-    voted_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    voted_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     cnt = models.IntegerField(default=0)
 
 # Discussion 댓글
@@ -32,6 +32,5 @@ class DComment(models.Model):
     discussion = models.ForeignKey(Discussion, on_delete = models.CASCADE, related_name="comments", default='', null=True)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     content = models.TextField(blank = False, null = False)
-    # created_at -> default=datetime.now()로 수정했음!! (migrate 오류)
-    created_at = models.DateTimeField(default=datetime.now())
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

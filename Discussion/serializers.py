@@ -12,7 +12,7 @@ class DiscussionSerializer(serializers.ModelSerializer):
     def get_choices(self, instance):
         serializer = ChoiceSerializer(instance.choices, many=True)
         return serializer.data
-
+    
     image = serializers.ImageField(use_url=True, required=False)
 
     class Meta:
@@ -29,7 +29,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Choice
-        fields = '__all__'
+        fields = ['id', 'discussion', 'vote_item', 'cnt']
         read_only = ['id', 'discussion', 'cnt']
     
 

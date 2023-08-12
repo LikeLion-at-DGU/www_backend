@@ -5,6 +5,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('Record.urls')),
     path('api/', include('Discussion.urls')),
+    path('api/', include('Companion.urls')),
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
