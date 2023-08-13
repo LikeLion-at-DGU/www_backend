@@ -25,7 +25,7 @@ class Record(models.Model):
     # 사진들을 저장할 ManyToMany 필드
     photos = models.ManyToManyField('Record_Photo', related_name='Record_Photo', blank=True)
     # 스크랩
-    scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='scraps', blank=True)
+    record_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='record_scraps', blank=True)
 
 # Record 사진
 class Record_Photo(models.Model):
@@ -54,3 +54,5 @@ class Card(models.Model):
     card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
     card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
     card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
+    # Card 스크랩
+    card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)

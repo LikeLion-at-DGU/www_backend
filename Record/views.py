@@ -64,12 +64,12 @@ class RecordViewSet(viewsets.ModelViewSet):
     
     #1-6. 스크랩 기능
     @action(methods=['POST'], detail=True)
-    def scrap(self, request, pk=None):
+    def record_scrap(self, request, pk=None):
         scrap_record = self.get_object()
-        if request.user in scrap_record.scrap.all():
-            scrap_record.scrap.remove(request.user)
+        if request.user in scrap_record.record_scrap.all():
+            scrap_record.record_scrap.remove(request.user)
         else:
-            scrap_record.scrap.add(request.user)
+            scrap_record.record_scrap.add(request.user)
             
         scrap_record.save()
         return Response()
@@ -84,7 +84,7 @@ class RCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins
 
 
 #3. Record 글에 있는 댓글 목록 조회, Record 게시물에 댓글 작성
-class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
     queryset = RComment.objects.all()
     serializer_class = RCommentSerializer
 
@@ -101,10 +101,19 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
         serializer.save(record=record)
         return Response(serializer.data)
     
-
+    #3-1. 댓글을 통한 유저 follow (댓글 id 값 들어가서 팔로우 수행)
+    @action(detail=True, methods=['GET'])
+    def follow(self, request, record_id=None, pk=None):
+        
+        record = get_object_or_404(Record, id=record_id)
+        comment = get_object_or_404(RComment, id=pk, record=record)
+        
+        return Response()
     
+
+
 #4. Record와 연결된 Card 목록 조회, Card 작성
-class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
 
@@ -120,14 +129,14 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
         record = get_object_or_404(Record, id=record_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+        serializer.save(record=record)
+
         # 태그 작성 (1)
         self.perform_create(serializer)
 
         card = serializer.instance
         self.handle_tags(card)
 
-        serializer.save(record=record)
         return Response(serializer.data)
     
     #4-2. 태그 작성(2)
@@ -143,3 +152,15 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
             card.tag.add(tag)
 
         card.save()
+
+    #4-3. Card 스크랩 기능
+    @action(methods=['POST'], detail=True)
+    def card_scrap(self, request, record_id=None, pk=None):
+        scrap_card = self.get_object()
+        if request.user in scrap_card.card_scrap.all():
+            scrap_card.card_scrap.remove(request.user)
+        else:
+            scrap_card.card_scrap.add(request.user)
+            
+        scrap_card.save()
+        return Response()
