@@ -61,6 +61,19 @@ class RecordViewSet(viewsets.ModelViewSet):
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+    #1-6. 스크랩 기능
+    @action(methods=['POST'], detail=True)
+    def scrap(self, request, pk=None):
+        scrap_record = self.get_object()
+        if request.user in scrap_record.scrap.all():
+            scrap_record.scrap.remove(request.user)
+        else:
+            scrap_record.scrap.add(request.user)
+            
+        scrap_record.save()
+        return Response()
+    
 
 
 #2. RComment 디테일 조회 수정 삭제 기능
