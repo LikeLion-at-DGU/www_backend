@@ -33,6 +33,7 @@ class RCommentSerializer(serializers.ModelSerializer):
 
     def get_record(self, instance):
         return instance.record.title
+    
 
     class Meta:
         model = RComment

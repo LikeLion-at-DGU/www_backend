@@ -1,5 +1,8 @@
 from .models import Record, RComment, Card, Tag, Upload_image
 from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer, Upload_imageSerializer
+from profiles.models import Profile # 프로필 앱에서 프로필 모델 import 하기
+from accounts.models import User
+
 
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
@@ -109,11 +112,17 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
     @action(detail=True, methods=['GET'])
     def follow(self, request, record_id=None, pk=None):
         
-        record = get_object_or_404(Record, id=record_id)
-        comment = get_object_or_404(RComment, id=pk, record=record)
+        user=request.user # user = 요청한 유저
+        # 파라미터로 받은 id에 해당하는 객체를 User 모델에서 가져온다
+        followed_user=get_object_or_404(User, pk=followed_user.id)
+        # 팔로우 한 사람들 리스트에 요청한 유저가 있는지 확인
+        is_follower=user.profile in followed_user.profile.followers.all()
+        if is_follower: # 있다면, followed_user를 팔로잉 목록에서 지운다
+            user.profile.followings.remove(followed_user.profile)
+        else: # 아니라면, followed_user를 팔로잉 목록에 추가한다
+            user.profile.followings.add(followed_user.profile)
         
         return Response()
-    
 
 
 #4. Record와 연결된 Card 목록 조회, Card 작성
