@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 
 from .models import Companion, CoComment
 from .serializers import CompanionSerializer, CoCommentSerializer
@@ -11,6 +12,9 @@ from .serializers import CompanionSerializer, CoCommentSerializer
 class CompanionViewSet(viewsets.ModelViewSet):
     queryset = Companion.objects.all()
     serializer_class = CompanionSerializer
+
+    filter_backends = [SearchFilter]
+    search_fields = ['country']
     
     # companion 게시글 좋아요 
     @action(methods=['POST'], detail=True)
@@ -47,9 +51,6 @@ class CompanionViewSet(viewsets.ModelViewSet):
         save_companion.save(update_fields=['isSave'])
 
         return Response()
-        
-    
-
 
     # 조회수
     def retrieve(self, request, *args, **kwargs):
