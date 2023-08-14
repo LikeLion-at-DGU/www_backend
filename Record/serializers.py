@@ -64,3 +64,11 @@ class CardSerializer(serializers.ModelSerializer):
         model = Card
         fields = '__all__'
         read_only_fields = ['record']
+
+
+# Upload_image 시리얼라이저
+class Upload_imageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Upload_image
+        fields = '__all__'
