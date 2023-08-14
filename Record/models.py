@@ -56,3 +56,8 @@ class Card(models.Model):
     card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
     # Card 스크랩
     card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)
+
+
+# 이미지 URL 저장되는 모델
+class Upload_image(models.Model):
+    url = models.CharField(max_length=300)

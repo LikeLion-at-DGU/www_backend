@@ -1,5 +1,5 @@
-from .models import Record, RComment, Card, Tag
-from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer
+from .models import Record, RComment, Card, Tag, Upload_image
+from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer, Upload_imageSerializer
 
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
@@ -164,3 +164,9 @@ class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
             
         scrap_card.save()
         return Response()
+    
+
+#5. 이미지 URL을 관리
+class Upload_imageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Upload_image.objects.all()
+    serializer_class = Upload_imageSerializer
