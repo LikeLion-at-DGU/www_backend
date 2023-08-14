@@ -18,8 +18,8 @@ class CompanionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Companion
-        fields = ['id','title','writer','body','date','continent','country','city','views','comments','comments_count','like_count', 'isSave']
-        read_only = ['id', 'writer', 'views', 'comments_count', 'like_count', 'isSave']
+        fields = ['id','title','writer','body','date','continent','country','city','views','comments','comments_count','like_count', 'isSave', 'created_at']
+        read_only = ['id', 'writer', 'views', 'comments_count', 'like_count', 'isSave', 'created_at']
     
 
 class CoCommentSerializer(serializers.ModelSerializer):
@@ -34,5 +34,5 @@ class CoCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CoComment
-        fields = ['id', 'writer', 'content', 'companion', 'like_count']
-        read_only = ['id', 'writer', 'companion', 'like_count']
+        fields = ['id', 'writer', 'content', 'companion', 'like_count', 'created_at']
+        read_only = ['id', 'writer', 'companion', 'like_count', 'created_at']
