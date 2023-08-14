@@ -70,6 +70,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     # cors-headers
     'corsheaders',
+    # filters
+    'django_filters',
 ]
 
 SITE_ID = 1

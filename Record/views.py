@@ -5,6 +5,8 @@ from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 #1. RECORD 글 작성 기능
 class RecordViewSet(viewsets.ModelViewSet):
@@ -13,6 +15,9 @@ class RecordViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return RecordListSerializer
         return RecordSerializer
+    
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['title', 'body']
     
     #1-1. 태그 작성
     def create(self, request):
