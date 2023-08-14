@@ -73,7 +73,6 @@ class RecordViewSet(viewsets.ModelViewSet):
             
         scrap_record.save()
         return Response()
-    
 
 
 #2. RComment 디테일 조회 수정 삭제 기능
