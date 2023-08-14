@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 from datetime import datetime
@@ -15,6 +14,9 @@ class Discussion(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
+    
+    def __str__(self) -> str:
+        return self.title
 
 # 글에 대한 투표 항목
 class Choice(models.Model):
