@@ -60,4 +60,4 @@ class Card(models.Model):
 
 # 이미지 URL 저장되는 모델
 class Upload_image(models.Model):
-    url = models.CharField(max_length=300)
+    url = models.ImageField(upload_to='record_photos/')
