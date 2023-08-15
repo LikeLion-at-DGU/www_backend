@@ -3,7 +3,6 @@ from .serializers import RecordSerializer, RecordListSerializer, RCommentSeriali
 from profiles.models import Profile # 프로필 앱에서 프로필 모델 import 하기
 from accounts.models import User
 
-
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from django.shortcuts import render, get_object_or_404
@@ -70,7 +69,7 @@ class RecordViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     
-    #1-6. 스크랩 기능
+    #1-6. Record 스크랩 기능
     @action(methods=['POST'], detail=True)
     def record_scrap(self, request, pk=None):
         scrap_record = self.get_object()
