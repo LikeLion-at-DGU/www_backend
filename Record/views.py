@@ -1,6 +1,5 @@
 from .models import Record, RComment, Card, Tag, Upload_image
 from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, CardSerializer, Upload_imageSerializer
-from profiles.models import Profile # 프로필 앱에서 프로필 모델 import 하기
 from accounts.models import User
 
 from rest_framework import viewsets, mixins
