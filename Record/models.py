@@ -38,6 +38,9 @@ class RComment(models.Model):
     record = models.ForeignKey(Record, on_delete = models.CASCADE, related_name = "rcomments")
     content = models.TextField(blank = False, null = False)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    # RComment 좋아요
+    rcomment_like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='rcomment_likes', blank=True)
+    rcomment_like_count = models.PositiveIntegerField(default=0)
 
 
 # Card 모델
