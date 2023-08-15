@@ -93,6 +93,24 @@ class RCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins
     queryset = RComment.objects.all()
     serializer_class = RCommentSerializer
 
+    #2-1. comment 좋아요
+    @action(methods=['POST'], detail=True)
+    def like(self, request, pk=None):
+        like_comment = self.get_object()
+        
+        if request.user in like_comment.rcomment_like.all():
+            like_comment.rcomment_like_count -= 1
+            like_comment.rcomment_like.remove(request.user)
+        else:
+            like_comment.rcomment_like_count += 1
+            like_comment.rcomment_like.add(request.user)
+
+        like_comment.save(update_fields=["rcomment_like_count"])
+
+        return Response()
+
+
+
 
 
 #3. Record 글에 있는 댓글 목록 조회, Record 게시물에 댓글 작성
@@ -128,6 +146,7 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
             user.profile.followings.add(followed_user.profile)
         
         return Response()
+    
 
 
 #4. Record와 연결된 Card 목록 조회, Card 작성
