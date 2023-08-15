@@ -23,7 +23,7 @@ class RecordSerializer(serializers.ModelSerializer):
         model = Record
         fields = "__all__"
         # 작성 안해주고 읽기만 해주는 필드
-        read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'likes',]
+        read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'rlike', 'rlike_count']
 
     image = serializers.ImageField(use_url=True, required=False)
 
