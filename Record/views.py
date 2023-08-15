@@ -52,12 +52,19 @@ class RecordViewSet(viewsets.ModelViewSet):
         record.tag.clear()
         self.handle_tags(record)
 
-    #1-4. 좋아요 기능 구현 (요청마다 views 필드 수정하기)
-    @action(methods=["GET"], detail=True)
-    def record_like(self, request, pk=None):
+    #1-4. 좋아요 기능 구현
+    @action(methods=['POST'], detail=True)
+    def like(self, request, pk=None):
         like_record = self.get_object()
-        like_record.likes += 1
-        like_record.save(update_fields=["likes"])
+        if request.user in like_record.rlike.all():
+            like_record.rlike_count -= 1
+            like_record.rlike.remove(request.user)
+        else:
+            like_record.rlike_count += 1
+            like_record.rlike.add(request.user)
+
+        like_record.save(update_fields=["rlike_count"])
+
         return Response()
     
     #1-5. 조회수 기능 (views)

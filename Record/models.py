@@ -21,7 +21,8 @@ class Record(models.Model):
     # 조회수
     views = models.PositiveSmallIntegerField(default=0)
     # 좋아요
-    likes = models.PositiveSmallIntegerField(default=0)
+    rlike = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='rlikes', blank=True)
+    rlike_count = models.PositiveIntegerField(default=0)
     # 사진들을 저장할 ManyToMany 필드
     photos = models.ManyToManyField('Record_Photo', related_name='Record_Photo', blank=True)
     # 스크랩

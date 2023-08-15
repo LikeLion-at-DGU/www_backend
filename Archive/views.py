@@ -62,7 +62,7 @@ class CardListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         return Response(serializer.data)
     
 
-#5. 내가 쓴 글 불러오는 기능
+#5. 내가 쓴 글 불러오는 기능 (아직...안됨....)
 class MyRecordViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     queryset = Record.objects.all()
     serializer_class = RecordSerializer
