@@ -41,7 +41,7 @@ class CompanionViewSet(viewsets.ModelViewSet):
         else:
             scarp_companion.scraped_user.add(request.user)
 
-        scarp_companion.save(update_fields=['scraped_user'])
+        scarp_companion.save()
         
         return Response()
     
