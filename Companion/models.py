@@ -21,6 +21,7 @@ class Companion(models.Model):
     views = models.PositiveIntegerField(default=0)
     like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='likes', blank=True)
     like_count = models.PositiveIntegerField(default=0)
+    # Companion 스크랩 기능
     scraped_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmark_users', blank=True)
     isSave = models.BooleanField(default=False) # False면 글 게시, True면 글 임시저장
 
