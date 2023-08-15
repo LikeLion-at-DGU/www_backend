@@ -6,6 +6,7 @@ urlpatterns = [
     path('api/', include('Record.urls')),
     path('api/', include('Discussion.urls')),
     path('api/', include('Companion.urls')),
+    path('api/', include('Archive.urls')),
     # accoutns
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
