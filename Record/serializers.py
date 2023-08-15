@@ -56,10 +56,7 @@ class RecordListSerializer(serializers.ModelSerializer):
 
 # Card 시리얼라이저
 class CardSerializer(serializers.ModelSerializer):
-    record = serializers.SerializerMethodField()
 
-    def get_record(self, instance):
-        return instance.record.title
 
     class Meta:
         model = Card
