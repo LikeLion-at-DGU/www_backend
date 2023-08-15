@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractUser
+from django.conf import settings
 
 # Create your models here.
 def image_upload_path(instance, filename):
@@ -57,7 +58,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=10, default='', null=False, blank=False)
     city = models.CharField(max_length=10, default='', null=False, blank=False)
     profile_img = models.ImageField(upload_to=image_upload_path, blank=True, null=True, default='default/default_profile_img.png')
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
+    friend = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, related_name='friends', on_delete=models.CASCADE )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nickname', 'country', 'city']
