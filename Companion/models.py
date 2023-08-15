@@ -21,7 +21,7 @@ class Companion(models.Model):
     views = models.PositiveIntegerField(default=0)
     like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='likes', blank=True)
     like_count = models.PositiveIntegerField(default=0)
-    scraped_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmark_users', blank=True)
+    scraped_user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='scarped_users', blank=True)
     isSave = models.BooleanField(default=False) # False면 글 게시, True면 글 임시저장
 
 class CoComment(models.Model):

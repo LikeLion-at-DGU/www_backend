@@ -1,109 +1,148 @@
-import requests
-from django.shortcuts import redirect
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-from django.http import JsonResponse
-from json.decoder import JSONDecodeError
-from rest_framework import status
+from rest_framework import viewsets, mixins, status
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers.google import views as google_view
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from rest_framework.views import APIView
 from allauth.socialaccount.models import SocialAccount
+from django.shortcuts import get_object_or_404
+
+from django.contrib.auth import authenticate, login
+
+from .serializers import UserRegisterSerializer, UserSerializer, UserLoginSerializer, SocialUserSerializer
 from .models import User
-from django.views.decorators.csrf import csrf_exempt
 
+# viewset
 
-BASE_URL = 'http://127.0.0.1:8000/'
-GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/login/callback/'
+# 이거는 아예 새로운 User를 만드는거
+class SignUpViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = User.objects.all()
+    serializer_class = UserRegisterSerializer
 
-state = getattr(settings, 'STATE')
+    def create(self, request):
+        password = request.data.get('password')
 
+        user_data = {
+            'email' : request.data['email'],
+            'nickname' : request.data['nickname'],
+            'country' : request.data['country'],
+            'city' : request.data['city']
+        }
 
-def google_login(request):
-    """
-    Code Request
-    """
-    scope = "https://www.googleapis.com/auth/userinfo.email"
-    client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
-    return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
+        user = User.objects.create(**user_data)
+        # user.set_password(password)
+        user.save()
 
-def google_callback(request):
-    client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
-    client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
 
-    code = request.GET.get('code') 
-
-    # 1. 받은 인가 코드를 통해 google access token 요청 
-    token_req = requests.post(
-        f"https://oauth2.googleapis.com/token?client_id={client_id}&client_secret={client_secret}&code={code}&grant_type=authorization_code&redirect_uri={GOOGLE_CALLBACK_URI}&state={state}")
+        res = Response(
+            {
+                "message": "회원가입 성공!"
+            },
+            status=status.HTTP_200_OK,
+            )
+        return res
     
-    token_req_json = token_req.json()
-    error = token_req_json.get("error")
 
-    if error is not None:
-        raise JSONDecodeError(error)
+# 내가 생각하는 viewset
+class SocialSignUpViewset(APIView):
+    queryset = User.objects.all()
+    serializer_class = SocialUserSerializer
+
+    def put(self, request):
+        # user = get_object_or_404(User, pk=pk)
+        user = request.user
+        print(user)
+        user.nickname = request.data.get('nickname')
+        user.country = request.data.get('country')
+        user.city = request.data.get('city')
+
+        user.save()
+
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+
+        res = Response(
+            {
+                "message": "회원가입 성공!"
+            },
+            status=status.HTTP_200_OK,
+            )
+        return res
     
-    access_token = token_req_json.get('access_token')
+    def get(self, request):
+        user = request.user
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
 
 
-    # 2. 받은 access_token으로 googel에 eamil 요청
-    email_req = requests.get(f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={access_token}")
-    
-    email_req_status = email_req.status_code
+    # def list(self, request, *args, **kwargs):
+    #     return self.list(request, *args, **kwargs)
 
-    if email_req_status != 200:
-        return JsonResponse({'err_msg': 'failed to get email'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    email_req_json = email_req.json()
-    email = email_req_json.get('email')
+        # social_user = SocialAccount.objects.get(user=request.user)
+        # print(social_user)
+        
 
-    #
-    try:
-        # 전달 받은 이메일이 User에 있는지 확인
+        # user.nickname = request.data['nickname']
+        # user.country = request.data['country']
+        # user.city = request.data['city']
+        # user.save()
+
+        # refresh = RefreshToken.for_user(user)
+        # access_token = str(refresh.access_token)
+
+        # res = Response(
+        #     {
+        #         "message": "회원가입 성공!"
+        #     },
+        #     status=status.HTTP_200_OK,
+        #     )
+        return Response()
+
+# 이것도 지금 id, password 
+class LoginAPIView(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
         user = User.objects.get(email=email)
-        # 기존에 가입된 유저의 Provider가 google이 아니면 에러 발생, 맞으면 로그인
-        # 다른 SNS로 가입된 유저
-        social_user = SocialAccount.objects.get(user=user)
+        user = authenticate(request, email=email,password=password)
 
-        if social_user is None:
-            return JsonResponse({'err_msg': 'email exists but not social user'}, status=status.HTTP_400_BAD_REQUEST)
-        if social_user.provider != 'google':
-            return JsonResponse({'err_msg': 'no matching social type'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # 기존에 Google로 가입된 유저
-        data = {'access_token': access_token, 'code': code}
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            
+            login(request, user)
+            res = Response(
+                {
+                    "user": {
+                        'nickname': user.nickname,
+                        'email': user.email,
+                        'country' : user.country,
+                        'city': user.city,
+                        'password' : user.password
+                    },
+                    "message": "로그인 성공!",
+                    "token": {
+                        "access": access_token,
+                        "refresh": str(refresh),
+                    },
+                },
+                status=status.HTTP_200_OK,
+                )
+            return res
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        accept = requests.post(f"{BASE_URL}accounts/google/login/finish/", data=data)
-        accept_status = accept.status_code
 
-        if accept_status != 200:
-            return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
-        
-        accept_json = accept.json()
-        accept_json.pop('user', None)
+class SocialUserApplyViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin):
+    serializer_class = SocialUserSerializer
 
-        return JsonResponse(accept_json)
+# class UserViewSet(viewsets.GenericViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
     
-    # User 안에 없으면
-    except User.DoesNotExist:
-
-        # 기존에 가입된 유저가 없으면 새로 가입
-        data = {'access_token': access_token, 'code': code}
-
-        accept = requests.post(f"{BASE_URL}accounts/google/login/finish/", data=data)
-        accept_status = accept.status_code
-
-        # 문제 있으면
-        if accept_status != 200:
-            return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
-        
-        accept_json = accept.json()
-        accept_json.pop('user', None)
-
-        return JsonResponse(accept_json)
     
-class GoogleLogin(SocialLoginView):
-    adapter_class = google_view.GoogleOAuth2Adapter
-    callback_url = GOOGLE_CALLBACK_URI
-    client_class = OAuth2Client
+    

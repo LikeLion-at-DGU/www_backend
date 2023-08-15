@@ -10,6 +10,4 @@ urlpatterns = [
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('accounts.urls')),
-    # profiles
-    path('profiles/', include('profiles.urls')),
 ] 

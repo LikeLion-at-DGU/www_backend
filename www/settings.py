@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'Record',
     'accounts',
     'Companion',
-    'profiles',
     # django-rest-auth
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
