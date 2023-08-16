@@ -5,7 +5,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     friendsCount = serializers.SerializerMethodField()
     def get_friendsCount(self, instance):
-        return instance.friend.count()
+        return instance.friends.count()
 
     class Meta:
         model = User

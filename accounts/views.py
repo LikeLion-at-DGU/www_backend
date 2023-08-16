@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -44,10 +44,21 @@ class SocialSignUpViewset(APIView):
         serializer = self.serializer_class(user)
         return Response(serializer.data)
 
-class UserViewset(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.RetrieveModelMixin):
+class UserViewset(APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_field = 'email'
+    
+    def get(self, request):
+        user = request.user
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
+    
+# class 
+
+# class UserViewset(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     lookup_field = 'email'
     
 # 궁금한점 -> mixin으로 구현하게 되면 retrieve에서 url에 pk 를 만드는데 프론트에서 pk를 모르잖아
 
