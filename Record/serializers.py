@@ -6,13 +6,17 @@ from .models import *
 class RecordSerializer(serializers.ModelSerializer):
     # Record 댓글 가져오기
     record_comments = serializers.SerializerMethodField(read_only=True)
+    tag = serializers.SerializerMethodField()
 
 
     # Record 모델에 댓글이 없으니깐....댓글도 가져오기
     def get_record_comments(self, instance):
         serializer = RCommentSerializer(instance.rcomments, many=True)
         return serializer.data
-    
+
+    def get_tag(self, instance):
+        tags = instance.tag.all()
+        return [tag.name for tag in tags]
 
     class Meta:
         model = Record
@@ -29,6 +33,11 @@ class RecordSerializer(serializers.ModelSerializer):
 
 # Card 시리얼라이저
 class CardSerializer(serializers.ModelSerializer):
+    tag = serializers.SerializerMethodField()
+
+    def get_tag(self, instance):
+        tags = instance.tag.all()
+        return [tag.name for tag in tags]
 
     class Meta:
         model = Record
@@ -54,10 +63,16 @@ class RCommentSerializer(serializers.ModelSerializer):
 # Record List
 class RecordListSerializer(serializers.ModelSerializer):
     rcomments_cnt = serializers.SerializerMethodField()
+    tag = serializers.SerializerMethodField()
 
     def get_rcomments_cnt(self, instance):
         return instance.rcomments.count()
     
+
+    def get_tag(self, instance):
+        tags = instance.tag.all()
+        return [tag.name for tag in tags]
+
     class Meta:
         model = Record
         fields = '__all__'
