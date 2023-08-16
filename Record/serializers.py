@@ -6,8 +6,6 @@ from .models import *
 class RecordSerializer(serializers.ModelSerializer):
     # Record 댓글 가져오기
     record_comments = serializers.SerializerMethodField(read_only=True)
-    # Record 카드 가져오기
-    record_cards = serializers.SerializerMethodField(read_only=True)
 
 
     # Record 모델에 댓글이 없으니깐....댓글도 가져오기
@@ -16,12 +14,11 @@ class RecordSerializer(serializers.ModelSerializer):
         return serializer.data
     
 
-
     class Meta:
         model = Record
         fields = "__all__"
         # 작성 안해주고 읽기만 해주는 필드
-        read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'rlike', 'rlike_count']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'rlike', 'rlike_count', 'record_scrap', 'tag', 'card_scrap']
 
     image = serializers.ImageField(use_url=True, required=False)
 
