@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-^vb8e@y40ler+@iy)-w-qum0bww@2$%j8a+!a2wh!rr-@t-pch
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -165,9 +165,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -191,13 +191,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #     os.path.join(BASE_DIR, 'www_frontend/build/assets')
 # ]
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 CORS_ALLOWED_ORIGINS = [
 	# 허용할 Origin 추가
     "http://localhost:5173",
-    "http://127.0.0.1:5173"
+    "http://localhost:5174",
+    "http://localhost:5173",
+    "http://127.0.0.1:5174",
+    "http://127.0.0.1:5173",
+    'http://127.0.0.1:8000',
+    
 ]
-CORS_ALLOW_CREDENTIALS = True
-# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:5173','http://localhost:3000','http://localhost:5173']
+
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
+    "http://localhost:5173",
+]
+
 
 SOCIALACCOUNT_LOGIN_ON_GET=True

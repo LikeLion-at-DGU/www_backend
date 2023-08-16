@@ -53,6 +53,14 @@ class UserViewset(APIView):
         serializer = self.serializer_class(user)
         return Response(serializer.data)
     
+class FriendViewset(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        user = request.user
+        serializer = self.serializer_class(user)
+    
 # class 
 
 # class UserViewset(viewsets.GenericViewSet, mixins.RetrieveModelMixin):

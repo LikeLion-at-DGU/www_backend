@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Companion, CoComment
 from .serializers import CompanionSerializer, CoCommentSerializer
+from accounts.models import User
 
 # companion
 class CompanionViewSet(viewsets.ModelViewSet):
@@ -97,3 +98,8 @@ class CommentViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.De
         like_comment.save(update_fields=["like_count"])
 
         return Response()
+
+    # @action(methods=['POST'], detail=True)
+    # def friend(self, request, pk=None):
+
+
