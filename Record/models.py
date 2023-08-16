@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 
+# 이미지 업로드 함수...?!
+def image_upload_path(instance, filename):
+    return f'{instance.pk}/{filename}'
+
+
+
 # Card 태그
 class Tag(models.Model):
     id = models.AutoField(primary_key=True)
@@ -38,9 +44,9 @@ class Record(models.Model):
     # Card 태그
     tag = models.ManyToManyField(Tag, blank=True)
     # Card 사진
-    card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
-    card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
-    card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
+    card_photo_1 = models.ImageField(upload_to=image_upload_path, null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
+    card_photo_2 = models.ImageField(upload_to=image_upload_path, null = True)
+    card_photo_3 = models.ImageField(upload_to=image_upload_path, null = True)
     # Card 스크랩
     card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)
 
@@ -48,7 +54,7 @@ class Record(models.Model):
 
 # Record 사진
 class Record_Photo(models.Model):
-    image = models.ImageField(upload_to='record_photos/')
+    image = models.ImageField(upload_to=image_upload_path)
 
 
 # Daily Record 댓글
@@ -63,4 +69,4 @@ class RComment(models.Model):
 
 # 이미지 URL 저장되는 모델
 class Upload_image(models.Model):
-    url = models.ImageField(upload_to='record_photos/')
+    url = models.ImageField(upload_to=image_upload_path)
