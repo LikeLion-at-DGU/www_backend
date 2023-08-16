@@ -21,24 +21,29 @@ class SocialSignUpViewset(APIView):
     def put(self, request):
         # user = get_object_or_404(User, pk=pk)
         user = request.user
-        print(user)
-        user.nickname = request.data.get('nickname')
-        user.country = request.data.get('country')
-        user.city = request.data.get('city')
+        if user.is_authenticated:  # 사용자가 로그인되어 있는지 확인
+            user.nickname = request.data.get('nickname')
+            user.country = request.data.get('country')
+            user.city = request.data.get('city')
+            user.save()
+            
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
 
-        user.save()
-
-        refresh = RefreshToken.for_user(user)
-        access_token = str(refresh.access_token)
-
-        res = Response(
-            {
-                "message": "회원가입 성공!"
-            },
-            status=status.HTTP_200_OK,
+            res = Response(
+                {
+                    "message": "회원가입 성공!"
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            res = Response(
+                {
+                    "message": "로그인된 사용자가 아닙니다."
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         return res
-    
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)

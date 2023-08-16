@@ -62,7 +62,8 @@ def google_callback(request):
     try:
         # 전달 받은 이메일이 User에 있는지 확인
         user = User.objects.get(email=email)
-        
+        isPlus = False
+    
         # FK로 연결되어 있는 socialaccount 테이블에서 해당 이메일의 유저가 있는지 확인
         social_user = SocialAccount.objects.get(user=user)
 
@@ -82,16 +83,13 @@ def google_callback(request):
         
         # accept_json = accept.json()
         # accept_json.pop('user', None)
-
-        isPlus = False
-    
     # User 안에 없으면
     except User.DoesNotExist:
         # 기존에 가입된 유저가 없으면 새로 가입
         data = {'access_token': access_token, 'code': code}
         accept = requests.post(f"{BASE_URL}accounts/google/login/finish/", data=data)
         accept_status = accept.status_code
-
+        isPlus = True
         # 문제 있으면
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
@@ -100,8 +98,7 @@ def google_callback(request):
         # nickname = 'google_'+ str(uid)
         # user = User.objects.get(email=email)
         # user.save()
-
-        isPlus = True
+        
 
         # accept_json = accept.json()
         # accept_json.pop('user', None)
@@ -111,7 +108,7 @@ def google_callback(request):
     refresh = RefreshToken.for_user(user)
     access_token = str(refresh.access_token)
 
-    # login(request, user)
+    login(request, user)
 
     if isPlus:
         print("True")
@@ -121,18 +118,17 @@ def google_callback(request):
         redirect_uri = 'http://127.0.0.1:5173'
 
 
-    # response = redirect(redirect_uri)
-    # response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
+    response = redirect(redirect_uri)
+    response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
 
-    return redirect_uri
+    print(redirect_uri)
+    return response
     # res = {
     #     "detail": "로그인 성공!",
     #     "access": access_token,
     #     "refresh": str(refresh),
     #     "isPlus": isPlus
     # }
-
-
     
 class GoogleLogin(SocialLoginView):
     adapter_class = google_view.GoogleOAuth2Adapter
