@@ -12,13 +12,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 #1. RECORD 글 작성 기능
 class RecordViewSet(viewsets.ModelViewSet):
     queryset = Record.objects.all()
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["title", "body", "=tag__name"]
     def get_serializer_class(self):
         if self.action == "list":
             return RecordListSerializer
         return RecordSerializer
     
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    search_fields = ['title', 'body']
+    
     
     #1-1. 태그 작성
     def create(self, request):
@@ -172,6 +173,10 @@ class Upload_imageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins
 class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
     queryset = Record.objects.all()
     serializer_class = CardSerializer
+
+    # Card 검색 (태그)
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ["=tag__name"]
 
     #5-1. Card 스크랩 기능
     @action(methods=['POST'], detail=True)
