@@ -8,6 +8,8 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from urllib.parse import unquote
+
 
 #1. RECORD 글 작성 기능
 class RecordViewSet(viewsets.ModelViewSet):
@@ -19,6 +21,17 @@ class RecordViewSet(viewsets.ModelViewSet):
             return RecordListSerializer
         return RecordSerializer
     
+
+    #1-0. 검색처리 (띄어쓰기 가능)
+    def get_queryset(self):
+        search_query = self.request.query_params.get('search')
+        if search_query:
+            decoded_query = unquote(search_query)
+            # Compare the decoded_query with available fields
+            available_fields = ["title", "body", "tag__name"]
+            if decoded_query in available_fields:
+                self.search_fields += [decoded_query]
+        return super().get_queryset()
     
     
     #1-1. 태그 작성
