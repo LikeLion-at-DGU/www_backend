@@ -12,9 +12,10 @@ class CompanionSerializer(serializers.ModelSerializer):
     def get_comments_count(self, instance):
         return instance.comments.count()
     
-    # writer = serializers.SerializerMethodField()
-    # def get_writer(self, instance):
-    #     return instance.writer.nickname
+    # isLike = serializers.SerializerMethodField()
+    # def get_isLike(self, instance):
+    #     requested_user = self.context.get('requested_user')
+
 
     class Meta:
         model = Companion

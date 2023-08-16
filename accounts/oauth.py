@@ -28,24 +28,20 @@ def google_login(request):
     Code Request
     """
     scope = "https://www.googleapis.com/auth/userinfo.email"
-    print("????")
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
 def google_callback(request):
-    print("?")
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
-
     code = request.GET.get('code') 
 
     # 1. 받은 인가 코드를 통해 google access token 요청 
     token_req = requests.post(
         f"https://oauth2.googleapis.com/token?client_id={client_id}&client_secret={client_secret}&code={code}&grant_type=authorization_code&redirect_uri={GOOGLE_CALLBACK_URI}&state={state}")
-    
     token_req_json = token_req.json()
-    error = token_req_json.get("error")
 
+    error = token_req_json.get("error")
     if error is not None:
         raise JSONDecodeError(error)
     
@@ -54,7 +50,6 @@ def google_callback(request):
 
     # 2. 받은 access_token으로 googel에 eamil 요청
     email_req = requests.get(f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={access_token}")
-    
     email_req_status = email_req.status_code
 
     if email_req_status != 200:
@@ -129,7 +124,7 @@ def google_callback(request):
     response = redirect(redirect_uri)
     response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
 
-    return response
+    return redirect(redirect_uri)
     # res = {
     #     "detail": "로그인 성공!",
     #     "access": access_token,
