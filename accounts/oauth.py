@@ -28,10 +28,12 @@ def google_login(request):
     Code Request
     """
     scope = "https://www.googleapis.com/auth/userinfo.email"
+    print("????")
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
 def google_callback(request):
+    print("?")
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
 
@@ -83,14 +85,13 @@ def google_callback(request):
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signin'}, status=accept_status)
         
-        accept_json = accept.json()
-        accept_json.pop('user', None)
+        # accept_json = accept.json()
+        # accept_json.pop('user', None)
 
         isPlus = False
     
     # User 안에 없으면
     except User.DoesNotExist:
-
         # 기존에 가입된 유저가 없으면 새로 가입
         data = {'access_token': access_token, 'code': code}
         accept = requests.post(f"{BASE_URL}accounts/google/login/finish/", data=data)
@@ -115,16 +116,28 @@ def google_callback(request):
     refresh = RefreshToken.for_user(user)
     access_token = str(refresh.access_token)
 
-    login(request, user)
+    # login(request, user)
 
-    res = {
-        "detail": "로그인 성공!",
-        "access": access_token,
-        "refresh": str(refresh),
-        "isPlus": isPlus
-    }
+    if isPlus:
+        print("True")
+        redirect_uri = 'http://127.0.0.1:5173/input'
+    else:
+        print("false")
+        redirect_uri = 'http://127.0.0.1:5173'
 
-    return JsonResponse(res)
+
+    response = redirect(redirect_uri)
+    response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
+
+    return response
+    # res = {
+    #     "detail": "로그인 성공!",
+    #     "access": access_token,
+    #     "refresh": str(refresh),
+    #     "isPlus": isPlus
+    # }
+
+
     
 class GoogleLogin(SocialLoginView):
     adapter_class = google_view.GoogleOAuth2Adapter

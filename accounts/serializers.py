@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'nickname', 'country', 'city', 'profile_img', 'friend', 'friendsCount'] # followings 나중에 추가
 
 class SocialUserSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = User
         fields = ['email', 'nickname', 'country', 'city']
