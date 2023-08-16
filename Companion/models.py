@@ -14,9 +14,9 @@ class Companion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     body = models.TextField()
     date = models.DateField() 
-    continent = models.CharField(max_length=10)
-    country = models.CharField(max_length=10)
-    city = models.CharField(max_length=10)
+    continent = models.CharField(max_length=30)
+    country = models.CharField(max_length=30)
+    city = models.CharField(max_length=20)
     # 그 외 field
     views = models.PositiveIntegerField(default=0)
     like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='likes', blank=True)

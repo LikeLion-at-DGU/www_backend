@@ -13,9 +13,9 @@ from .serializers import CompanionSerializer, CoCommentSerializer
 class CompanionViewSet(viewsets.ModelViewSet):
     queryset = Companion.objects.all()
     serializer_class = CompanionSerializer
-
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['country']
+    filterset_fields = ['continent']
     
     # companion 게시글 좋아요 
     @action(methods=['POST'], detail=True)
