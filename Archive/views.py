@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from Companion.models import Companion
-from Record.models import Record, Card
+from Record.models import Record
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import action
 from django.conf import settings
-from Record.serializers import RecordSerializer, CardSerializer
+from Record.serializers import RecordSerializer
 from Companion.serializers import CompanionSerializer
 
 
@@ -47,20 +47,7 @@ class CompanionListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
         return Response(serializer.data)
     
 
-#4. Card 스크랩 불러오는 기능
-class CardListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
-    queryset = Card.objects.all()
-    serializer_class = CardSerializer
 
-    #4-1. 스크랩 한 Card 필터링 --> data 가져오기
-    @action(detail=False, methods=['GET'])
-    def scrap_list(self, request):
-        user = request.user
-        scrap_list = Card.objects.filter(card_scrap=user)
-
-        serializer = self.get_serializer(scrap_list, many=True)
-        return Response(serializer.data)
-    
 
 #5. 내가 쓴 글 불러오는 기능 (아직...안됨....)
 class MyRecordViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
