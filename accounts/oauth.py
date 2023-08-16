@@ -121,10 +121,10 @@ def google_callback(request):
         redirect_uri = 'http://127.0.0.1:5173'
 
 
-    response = redirect(redirect_uri)
-    response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
+    # response = redirect(redirect_uri)
+    # response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
 
-    return redirect(redirect_uri)
+    return redirect_uri
     # res = {
     #     "detail": "로그인 성공!",
     #     "access": access_token,
