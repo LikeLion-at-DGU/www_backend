@@ -1,5 +1,5 @@
 from .models import Record, RComment, Tag, Upload_image
-from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, Upload_imageSerializer
+from .serializers import RecordSerializer, RecordListSerializer, RCommentSerializer, Upload_imageSerializer, CardSerializer
 from accounts.models import User
 
 from rest_framework import viewsets, mixins
@@ -162,8 +162,25 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
     
 
 
-
-#5. 이미지 URL을 관리
+#4. 이미지 URL을 관리
 class Upload_imageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = Upload_image.objects.all()
     serializer_class = Upload_imageSerializer
+
+
+#5. Card 관리
+class CardViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin):
+    queryset = Record.objects.all()
+    serializer_class = CardSerializer
+
+    #5-1. Card 스크랩 기능
+    @action(methods=['POST'], detail=True)
+    def card_scrap(self, request, pk=None):
+        scrap_card = self.get_object()
+        if request.user in scrap_card.card_scrap.all():
+            scrap_card.card_scrap.remove(request.user)
+        else:
+            scrap_card.card_scrap.add(request.user)
+            
+        scrap_card.save()
+        return Response()
