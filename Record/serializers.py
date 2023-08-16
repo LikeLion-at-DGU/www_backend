@@ -9,15 +9,13 @@ class RecordSerializer(serializers.ModelSerializer):
     # Record 카드 가져오기
     record_cards = serializers.SerializerMethodField(read_only=True)
 
+
     # Record 모델에 댓글이 없으니깐....댓글도 가져오기
     def get_record_comments(self, instance):
         serializer = RCommentSerializer(instance.rcomments, many=True)
         return serializer.data
     
-    # Record 모델에 카드가 없으니깐....카드도 가져오기
-    def get_record_cards(self, instance):
-        serializer = CardSerializer(instance.cards, many=True)
-        return serializer.data
+
 
     class Meta:
         model = Record
@@ -54,14 +52,7 @@ class RecordListSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at", "updated_at", "rcomments_cnt"]
 
 
-# Card 시리얼라이저
-class CardSerializer(serializers.ModelSerializer):
 
-
-    class Meta:
-        model = Card
-        fields = '__all__'
-        read_only_fields = ['record']
 
 
 # Upload_image 시리얼라이저

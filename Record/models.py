@@ -8,6 +8,7 @@ class Tag(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
 
+
 # Daily Record 글
 class Record(models.Model):
     id = models.AutoField(primary_key=True)
@@ -27,6 +28,23 @@ class Record(models.Model):
     photos = models.ManyToManyField('Record_Photo', related_name='Record_Photo', blank=True)
     # 스크랩
     record_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='record_scraps', blank=True)
+    
+    #카드 관련 -------------------------------------------------------------------
+    where = models.CharField(max_length=80)
+    what = models.CharField(max_length=100)
+    how = models.CharField(max_length=100)
+    # Card 태그를 입력하는 창(?)
+    tag_field = models.CharField(max_length=80, default=0, null=True)
+    # Card 태그
+    tag = models.ManyToManyField(Tag, blank=True)
+    # Card 사진
+    card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
+    card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
+    card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
+    # Card 스크랩
+    card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)
+
+
 
 # Record 사진
 class Record_Photo(models.Model):
@@ -41,25 +59,6 @@ class RComment(models.Model):
     # RComment 좋아요
     rcomment_like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='rcomment_likes', blank=True)
     rcomment_like_count = models.PositiveIntegerField(default=0)
-
-
-# Card 모델
-class Card(models.Model):
-    id = models.AutoField(primary_key=True)
-    record = models.ForeignKey(Record, on_delete = models.CASCADE, related_name = "cards") # Record 글과 ForeignKey 연결
-    where = models.CharField(max_length=80)
-    what = models.CharField(max_length=100)
-    how = models.CharField(max_length=100)
-    # Card 태그를 입력하는 창(?)
-    tag_field = models.CharField(max_length=80, default=0, null=True)
-    # Card 태그
-    tag = models.ManyToManyField(Tag, blank=True)
-    # Card 사진
-    card_photo_1 = models.ImageField(upload_to='record_photos/', null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
-    card_photo_2 = models.ImageField(upload_to='record_photos/', null = True)
-    card_photo_3 = models.ImageField(upload_to='record_photos/', null = True)
-    # Card 스크랩
-    card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)
 
 
 # 이미지 URL 저장되는 모델
