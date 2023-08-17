@@ -6,28 +6,31 @@ from rest_framework.views import APIView
 from allauth.socialaccount.models import SocialAccount
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import authenticate, login
 
-from .serializers import  UserSerializer,  SocialUserSerializer
+from .serializers import  UserSerializer
 from .models import User
+
+from .authentication import CookieAuthentication
 
 
 # 내가 생각하는 viewset
 class SocialSignUpViewset(APIView):
     queryset = User.objects.all()
-    serializer_class = SocialUserSerializer
+    serializer_class = UserSerializer
+    authentication_classes = [CookieAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def put(self, request):
         # user = get_object_or_404(User, pk=pk)
         user = request.user
-        print(user)
         user.nickname = request.data.get('nickname')
         user.country = request.data.get('country')
         user.city = request.data.get('city')
-
         user.save()
-
+            
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
 
@@ -36,13 +39,13 @@ class SocialSignUpViewset(APIView):
                 "message": "회원가입 성공!"
             },
             status=status.HTTP_200_OK,
-            )
+        )
         return res
     
     def get(self, request):
         user = request.user
         serializer = self.serializer_class(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserViewset(APIView):
     queryset = User.objects.all()
