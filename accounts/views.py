@@ -76,4 +76,3 @@ class TestLoginViewset(APIView):
             return Response({"message": "테스트 로그인 성공!"})
         else:
             return Response({"message": "테스트 로그인 실패!"}, status=401)
-        return Response({"message": "테스트 로그인 성공!"})
