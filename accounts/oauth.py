@@ -100,10 +100,13 @@ def google_callback(request):
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         
         uid = email_req_json.get('user_id')
-        nickname = 'google_'+ str(uid)
-        user = User.objects.get(email=email)
-        user.nickname = nickname
-        user.save()
+        nickname = 'google_' + str(uid)
+        try:
+            user = User.objects.get(email=email)
+            user.nickname = nickname
+            user.save()
+        except User.DoesNotExist:
+            user = User.objects.create(email=email, nickname=nickname)
         
 
         # accept_json = accept.json()
