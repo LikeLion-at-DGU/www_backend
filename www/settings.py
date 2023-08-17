@@ -30,6 +30,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # cors-headers
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,8 +57,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    # cors-headers
-    'corsheaders',
     # filters
     'django_filters',
 ]
@@ -194,6 +194,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #     os.path.join(BASE_DIR, 'www_frontend/build/assets')
 # ]
 
+# CORS 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -205,7 +206,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5174",
     "http://127.0.0.1:5173",
     'http://127.0.0.1:8000',
-    
+
+    'http://13.124.18.55',
+    'http://13.124.18.55:5173',
+    'http://13.124.18.55:3000'
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -215,7 +219,28 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:5173",
 ]
 
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
 
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:5173/input'
+# LOGIN_REDIRECT_URL = 'http://127.0.0.1:5173/input'
