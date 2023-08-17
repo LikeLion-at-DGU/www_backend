@@ -67,9 +67,13 @@ class TestLoginViewset(APIView):
     def post(self, request):
         test_email = 'test1@naver.com'
         test_password = '1234'
-        
-        user = User.objects.get(email=test_email)
 
-        login(request, user)
+        user = authenticate(request, email=test_email, password=test_password)
 
+        if user is not None:
+            # 로그인 처리
+            login(request, user)
+            return Response({"message": "테스트 로그인 성공!"})
+        else:
+            return Response({"message": "테스트 로그인 실패!"}, status=401)
         return Response({"message": "테스트 로그인 성공!"})
