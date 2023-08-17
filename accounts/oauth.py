@@ -19,7 +19,8 @@ from django.contrib.auth import login
 from django.http import JsonResponse
 from .models import User
 
-BASE_URL = 'http://127.0.0.1:8000/'
+BASE_URL = 'https://wwww.likelionwww.com/'
+# BASE_URL = 'http://127.0.0.1:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/login/callback/'
 
 state = getattr(settings, 'STATE')
