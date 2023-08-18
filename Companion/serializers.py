@@ -20,6 +20,10 @@ class CompanionSerializer(serializers.ModelSerializer):
             'country': instance.writer.country
         }
         return writer_info
+    
+    # like = serializers.SerializerMethodField()
+    # def get_like(self, instance):
+        # like = instance.
 
     # isLike = serializers.SerializerMethodField()
     # def get_isLike(self, instance):
