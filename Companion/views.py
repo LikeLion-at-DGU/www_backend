@@ -91,9 +91,7 @@ class CompanionCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mi
         serializer = self.get_serializer(data=request.data)
         print(serializer)
         serializer.is_valid(raise_exception=True)
-
         serializer.save(companion=companion, writer=request.user)
-
         return Response(serializer.data)
 
 # comment - 수정, 삭제, 상세

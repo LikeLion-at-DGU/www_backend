@@ -161,7 +161,7 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
         record = get_object_or_404(Record, id=record_id)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(record=record)
+        serializer.save(record=record, writer=request.user)
         return Response(serializer.data)
     
 
