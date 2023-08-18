@@ -26,7 +26,7 @@ class CompanionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # 여기서 필요한 필드들을 설정하고 저장합니다.
-            print(request.user)
+            # print(request.user)
             serializer.save(writer=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

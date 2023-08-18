@@ -70,7 +70,9 @@ class TestLoginViewset(APIView):
         test_password = '1234'
 
         user = User.objects.get(email=test_email)
-        # user = authenticate(request, username=test_email, password=test_password)
+        print(user)
+        # user = authenticate(request, email=test_email, password=test_password)
+        # print(user)
 
         if user is not None:
             # 로그인 처리

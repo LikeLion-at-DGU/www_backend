@@ -12,15 +12,24 @@ class CompanionSerializer(serializers.ModelSerializer):
     def get_comments_count(self, instance):
         return instance.comments.count()
     
+    writer = serializers.SerializerMethodField()
+    def get_writer(self, instance):
+        writer_info = {
+            'nickname': instance.writer.nickname,
+            'city': instance.writer.city,
+            'country': instance.writer.country
+        }
+        return writer_info
+
     # isLike = serializers.SerializerMethodField()
     # def get_isLike(self, instance):
     #     requested_user = self.context.get('requested_user')
-
 
     class Meta:
         model = Companion
         fields = ['id','title','writer','body','date','continent','country','city','views','comments','comments_count','like_count', 'isSave', 'created_at']
         read_only = ['id', 'writer', 'views', 'comments_count', 'like_count', 'isSave', 'created_at']
+
     
 
 class CoCommentSerializer(serializers.ModelSerializer):
