@@ -17,6 +17,15 @@ class RecordSerializer(serializers.ModelSerializer):
     def get_tag(self, instance):
         tags = instance.tag.all()
         return [tag.name for tag in tags]
+    
+        writer = serializers.SerializerMethodField()
+    def get_writer(self, instance):
+        writer_info = {
+            'nickname': instance.writer.nickname,
+            'city': instance.writer.city,
+            'country': instance.writer.country
+        }
+        return writer_info
 
     class Meta:
         model = Record
