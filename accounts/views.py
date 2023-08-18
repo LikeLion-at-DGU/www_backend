@@ -9,9 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from .serializers import  UserSerializer
-from .models import User
+from .models import User, Profile
 
 from .authentication import CookieAuthentication
 
@@ -101,3 +103,14 @@ class TestLoginViewset(APIView):
         return Response({"message": "테스트 로그인 실패!"}, status=401)
         
         
+
+# User 모델 생성 할 때, Profile 자동적으로 생성
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
