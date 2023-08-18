@@ -30,8 +30,6 @@ class Record(models.Model):
     # 좋아요
     rlike = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='rlikes', blank=True)
     rlike_count = models.PositiveIntegerField(default=0)
-    # 사진들을 저장할 ManyToMany 필드
-    photos = models.ManyToManyField('Record_Photo', related_name='Record_Photo', blank=True)
     # 스크랩
     record_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='record_scraps', blank=True)
     
@@ -44,9 +42,9 @@ class Record(models.Model):
     # Card 태그
     tag = models.ManyToManyField(Tag, blank=True)
     # Card 사진
-    card_photo_1 = models.ImageField(upload_to=image_upload_path, null = True) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
-    card_photo_2 = models.ImageField(upload_to=image_upload_path, null = True)
-    card_photo_3 = models.ImageField(upload_to=image_upload_path, null = True)
+    card_photo_1 = models.ImageField(upload_to=image_upload_path) # null = True 사진을 첨부 안해도 돌아가게 하는....그런...
+    card_photo_2 = models.ImageField(upload_to=image_upload_path, blank = True, null = True)
+    card_photo_3 = models.ImageField(upload_to=image_upload_path, blank = True, null = True)
     # Card 스크랩
     card_scrap = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='card_scraps', blank=True)
 

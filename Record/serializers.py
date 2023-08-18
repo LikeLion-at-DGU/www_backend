@@ -24,7 +24,7 @@ class RecordSerializer(serializers.ModelSerializer):
         # 작성 안해주고 읽기만 해주는 필드
         read_only_fields = ['id', 'created_at', 'updated_at', 'views', 'rlike', 'rlike_count', 'record_scrap', 'tag', 'card_scrap']
     
-    card_photo_1 = serializers.ImageField(use_url=True, required=False)
+    card_photo_1 = serializers.ImageField(use_url=True, required=True) # 첫 사진은 required
     card_photo_2 = serializers.ImageField(use_url=True, required=False)
     card_photo_3 = serializers.ImageField(use_url=True, required=False)
 
