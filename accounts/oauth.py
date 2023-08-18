@@ -19,8 +19,8 @@ from django.contrib.auth import login
 from django.http import JsonResponse
 from .models import User
 
-# BASE_URL = 'https://wwww.likelionwww.com/'
-BASE_URL = 'https://43.202.147.226/'
+BASE_URL = 'https://likelionwww.com/'
+# BASE_URL = 'https://43.202.147.226/'
 # BASE_URL = 'http://127.0.0.1:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/login/callback/'
 

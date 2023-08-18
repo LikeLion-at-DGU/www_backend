@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'accounts',
     'Companion',
     # django-rest-auth
+    'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
     # dj-rest-auth
@@ -94,7 +95,9 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    # 'BLACKLIST_AFTER_ROTATION': True,
+    # 'TOKEN_USER_CLASS': 'django.contrib.auth.models.User'
+
 }
 
 
