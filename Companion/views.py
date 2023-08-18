@@ -26,7 +26,7 @@ class CompanionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # 여기서 필요한 필드들을 설정하고 저장합니다.
-            print(request.user)
+            # print(request.user)
             serializer.save(writer=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -38,10 +38,10 @@ class CompanionViewSet(viewsets.ModelViewSet):
         like_companion = self.get_object()
         if request.user in like_companion.like.all():
             like_companion.like_count -= 1
-            like_companion.like.remove(request.user)
+            like_companion.like.remove(request.user.id)
         else:
             like_companion.like_count += 1
-            like_companion.like.add(request.user)
+            like_companion.like.add(request.user.id)
 
         like_companion.save(update_fields=["like_count"])
 
