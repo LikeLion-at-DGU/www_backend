@@ -43,7 +43,7 @@ class User(AbstractUser):
     username = None
     id = models.AutoField(primary_key=True)
     email = models.EmailField(max_length=255, unique=True, default='', null=False, blank=False)
-    nickname = models.CharField(max_length=20, unique=True, )
+    nickname = models.CharField(max_length=20, unique=True )
     country = models.CharField(max_length=10, default='', null=False, blank=False)
     city = models.CharField(max_length=10, default='', null=False, blank=False)
     profile_img = models.ImageField(upload_to=image_upload_path, blank=True, null=True, default='default/default_profile_img.png')
