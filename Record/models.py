@@ -21,7 +21,7 @@ class Record(models.Model):
     title = models.CharField(max_length=50)
     weather = models.CharField(max_length=50)
     date = models.DateField(null = True, blank = True, default = None)
-    body = models.TextField(max_length=200)
+    body = models.TextField(max_length=2000)
     writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

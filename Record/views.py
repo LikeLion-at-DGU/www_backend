@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from urllib.parse import unquote
+from rest_framework.parsers import MultiPartParser
 
 
 #1. RECORD 글 작성 기능
@@ -16,6 +17,7 @@ class RecordViewSet(viewsets.ModelViewSet):
     queryset = Record.objects.all()
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ["title", "body", "=tag__name"]
+
     def get_serializer_class(self):
         if self.action == "list":
             return RecordListSerializer
@@ -33,7 +35,9 @@ class RecordViewSet(viewsets.ModelViewSet):
                 self.search_fields += [decoded_query]
         return super().get_queryset()
     
-    
+    parser_classes = [MultiPartParser]
+    # 필요한 곳에만 parser_classes를 MultiPartParser로 설정
+
     #1-1. 태그 작성
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
