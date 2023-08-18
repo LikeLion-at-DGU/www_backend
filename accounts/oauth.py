@@ -99,14 +99,14 @@ def google_callback(request):
         if accept_status != 200:
             return JsonResponse({'err_msg': 'failed to signup'}, status=accept_status)
         
-        uid = email_req_json.get('user_id')
-        nickname = 'google_' + str(uid)
-        try:
-            user = User.objects.get(email=email)
-            user.nickname = nickname
-            user.save()
-        except User.DoesNotExist:
-            user = User.objects.create(email=email, nickname=nickname)
+        # uid = email_req_json.get('user_id')
+        # nickname = 'google_' + str(uid)
+        # try:
+        #     user = User.objects.get(email=email)
+        #     user.nickname = nickname
+        #     user.save()
+        # except User.DoesNotExist:
+        #     user = User.objects.create(email=email, nickname=nickname)
         
 
         # accept_json = accept.json()
@@ -117,20 +117,17 @@ def google_callback(request):
     refresh = RefreshToken.for_user(user)
     access_token = str(refresh.access_token)
 
-    # login(request, user)
+    login(request, user)
 
-    if isPlus:
-        print("True")
-        redirect_uri = 'http://127.0.0.1:5173/input'
-    else:
-        print("false")
-        redirect_uri = 'http://127.0.0.1:5173'
+    res = {
+        "detail": "로그인 성공!",
+        "access": access_token,
+        "refresh": str(refresh),
+        "isPlus": isPlus,
+        "email" : email
+    }
 
-
-    response = redirect(redirect_uri)
-    response.set_cookie('access_token', access_token, max_age=3600, httponly=True)
-
-    return response
+    return JsonResponse(res)
 
     # res = {
     #     "detail": "로그인 성공!",
