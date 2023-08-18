@@ -99,7 +99,18 @@ class CommentViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.De
 
         return Response()
 
-    # @action(methods=['POST'], detail=True)
-    # def friend(self, request, pk=None):
+    # 댓글을 통한 follow
+    @action(methods=['POST'], detail=True)
+    def follow(self, request, pk=None):
+        # 현재 로그인한 사용자
+        current_user = request.user
+        # 팔로우 받는 사용자
+        comment_writer = CoComment.objects.get(pk=pk).writer
+
+        # 친구 추가
+        current_user.friends.add(comment_writer)
+        comment_writer.friends.add(current_user)
+
+        return Response()
 
 
