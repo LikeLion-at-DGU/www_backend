@@ -39,7 +39,7 @@ class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Record
-        fields = ['where', 'what', 'how', 'tag_field', 'tag', 'card_photo_1', 'card_photo_2', 'card_photo_3', 'card_scrap']
+        fields = ['where', 'what', 'how', 'tag_field', 'tag', 'card_photo_1', 'card_photo_2', 'card_photo_3', 'card_scrap', 'id', 'created_at']
         # 작성 안해주고 읽기만 해주는 필드
         read_only_fields = []
 

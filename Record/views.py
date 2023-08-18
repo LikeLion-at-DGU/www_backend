@@ -168,7 +168,7 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
 
     #3-1. 댓글을 통한 follow (Profile 모델을 통한 팔로우)
     @action(methods=['POST'], detail=True)
-    def follow2(self, request, pk=None, record_id=None):
+    def follow(self, request, pk=None, record_id=None):
         # 현재 로그인 한 사용자
         user = request.user
         # 팔로우 받는 사용자
