@@ -110,7 +110,7 @@ class RecordViewSet(viewsets.ModelViewSet):
     #         scrap_card.card_scrap.remove(request.user)
     #     else:
     #         scrap_card.card_scrap.add(request.user)
-            
+    
     #     scrap_card.save()
     #     return Response()
 
@@ -135,6 +135,8 @@ class RCommentViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins
         like_comment.save(update_fields=["rcomment_like_count"])
 
         return Response()
+    
+    
 
 
 
@@ -158,20 +160,20 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
         serializer.save(record=record)
         return Response(serializer.data)
     
-    #3-1. 댓글을 통한 유저 follow (댓글 id 값 들어가서 팔로우 수행)
-    @action(detail=True, methods=['GET'])
-    def follow(self, request, record_id=None, pk=None):
-        
-        user=request.user # user = 요청한 유저
-        # 파라미터로 받은 id에 해당하는 객체를 User 모델에서 가져온다
-        followed_user=get_object_or_404(User, pk=followed_user.id)
-        # 팔로우 한 사람들 리스트에 요청한 유저가 있는지 확인
-        is_follower=user.profile in followed_user.profile.followers.all()
-        if is_follower: # 있다면, followed_user를 팔로잉 목록에서 지운다
-            user.profile.followings.remove(followed_user.profile)
-        else: # 아니라면, followed_user를 팔로잉 목록에 추가한다
-            user.profile.followings.add(followed_user.profile)
-        
+
+
+    #3-1. 댓글을 통한 follow
+    @action(methods=['POST'], detail=True)
+    def follow(self, request, pk=None, record_id=None):
+        # 현재 로그인한 사용자
+        current_user = request.user
+        # 팔로우 받는 사용자
+        comment_writer = RComment.objects.get(pk=pk).writer
+
+        # 친구 추가
+        current_user.friends.add(comment_writer)
+        comment_writer.friends.add(current_user)
+
         return Response()
     
 
