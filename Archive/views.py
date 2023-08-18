@@ -89,7 +89,11 @@ class FriendsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     def get_friends(self, request):
         current_user = request.user
         if current_user.friend:
-            friends = current_user.friend.all()  # 해당 사용자의 모든 친구 불러오기
+            friends = [current_user.friend]  # 친구 객체 추가  # 해당 사용자의 모든 친구 불러오기
+
+        # User 모델의 friend 필드
+        # class User(AbstractUser):
+        # friend = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='friends', on_delete=models.CASCADE)
 
         # 친구들의 정보를 원하는 형식으로 가공
         friends_data = []
@@ -99,3 +103,5 @@ class FriendsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
                 'country': friend.country,
                 'city': friend.city,
             })
+        
+        return Response(friends_data)
