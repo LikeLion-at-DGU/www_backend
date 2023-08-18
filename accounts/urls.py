@@ -19,4 +19,5 @@ urlpatterns = [
     # user
     path('profile', UserViewset.as_view(), name='profile'),
     # path('userprofile', MyProfileViewset, name="userprofile"),
+    path('testlogin', TestLoginViewset.as_view(), name='testlogin'),
 ]
