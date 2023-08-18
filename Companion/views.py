@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
@@ -17,6 +17,20 @@ class CompanionViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['country']
     filterset_fields = ['continent']
+
+    def perform_create(self, serializer):
+        print('perform', self.request.user)
+        serializer.save(writer = self.request.user)
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            # 여기서 필요한 필드들을 설정하고 저장합니다.
+            print(request.user)
+            serializer.save(writer=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
     # companion 게시글 좋아요 
     @action(methods=['POST'], detail=True)
@@ -73,7 +87,9 @@ class CompanionCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mi
     
     def create(self, request, companion_id=None):
         companion = get_object_or_404(Companion, id=companion_id)
+
         serializer = self.get_serializer(data=request.data)
+        print(serializer)
         serializer.is_valid(raise_exception=True)
         serializer.save(companion=companion, writer=request.user)
         return Response(serializer.data)

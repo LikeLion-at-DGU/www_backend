@@ -26,6 +26,12 @@ class CustomTokenRefreshSerializer(serializers.Serializer):
         data = {'access_token': str(refresh.access_token)}
 
         return data
+    
+class UserLoginSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'country', 'city', 'nickname']
 
 
 # class UserRegisterSerializer(serializers.ModelSerializer):
