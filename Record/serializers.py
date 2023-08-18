@@ -7,12 +7,16 @@ class RecordSerializer(serializers.ModelSerializer):
     # Record 댓글 가져오기
     record_comments = serializers.SerializerMethodField(read_only=True)
     tag = serializers.SerializerMethodField()
+    rcomments_cnt = serializers.SerializerMethodField()
 
 
     # Record 모델에 댓글이 없으니깐....댓글도 가져오기
     def get_record_comments(self, instance):
         serializer = RCommentSerializer(instance.rcomments, many=True)
         return serializer.data
+    
+    def get_rcomments_cnt(self, instance):
+        return instance.rcomments.count()
 
     def get_tag(self, instance):
         tags = instance.tag.all()
