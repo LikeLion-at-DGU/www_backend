@@ -38,10 +38,10 @@ class CompanionViewSet(viewsets.ModelViewSet):
         like_companion = self.get_object()
         if request.user in like_companion.like.all():
             like_companion.like_count -= 1
-            like_companion.like.remove(request.user)
+            like_companion.like.remove(request.user.id)
         else:
             like_companion.like_count += 1
-            like_companion.like.add(request.user)
+            like_companion.like.add(request.user.id)
 
         like_companion.save(update_fields=["like_count"])
 

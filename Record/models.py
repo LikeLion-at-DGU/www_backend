@@ -22,7 +22,7 @@ class Record(models.Model):
     weather = models.CharField(max_length=50)
     date = models.DateField(null = True, blank = True, default = None)
     body = models.TextField(max_length=2000)
-    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=False, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # 조회수
@@ -59,7 +59,7 @@ class Record_Photo(models.Model):
 class RComment(models.Model):
     record = models.ForeignKey(Record, on_delete = models.CASCADE, related_name = "rcomments")
     content = models.TextField(blank = False, null = False)
-    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, blank=False, null=True)
     # RComment 좋아요
     rcomment_like = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='rcomment_likes', blank=True)
     rcomment_like_count = models.PositiveIntegerField(default=0)

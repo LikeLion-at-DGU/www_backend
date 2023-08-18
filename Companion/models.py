@@ -27,7 +27,7 @@ class Companion(models.Model):
 
 class CoComment(models.Model):
     id = models.AutoField(primary_key=True)
-    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, null=True)
     companion = models.ForeignKey(Companion, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)

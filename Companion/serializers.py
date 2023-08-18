@@ -27,8 +27,8 @@ class CompanionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Companion
-        fields = ['id','title','writer','body','date','continent','country','city','views','comments','comments_count','like_count', 'isSave', 'created_at']
-        read_only = ['id', 'writer', 'views', 'comments_count', 'like_count', 'isSave', 'created_at']
+        fields = ['id','title','writer','body','date','continent','country','city','views','comments','comments_count','like_count', 'like', 'isSave', 'created_at']
+        read_only = ['id', 'writer', 'views', 'comments_count', 'like_count', 'isSave', 'created_at', 'like']
 
     
 
