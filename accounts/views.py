@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
 
 from .serializers import  UserSerializer
 from .models import User
@@ -64,15 +65,39 @@ class FriendViewset(APIView):
         serializer = self.serializer_class(user)
 
 class TestLoginViewset(APIView):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         test_email = 'test1@naver.com'
         test_password = '1234'
 
-        user = authenticate(request, email=test_email, password=test_password)
+        user = User.objects.get(email=test_email)
+        # user = authenticate(request, username=test_email, password=test_password)
 
         if user is not None:
             # 로그인 처리
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+
             login(request, user)
-            return Response({"message": "테스트 로그인 성공!"})
-        else:
-            return Response({"message": "테스트 로그인 실패!"}, status=401)
+
+            res =  Response(
+                {
+                    "user": {
+                        'nickname': user.nickname,
+                        'email': user.email,
+                        'country' : user.country,
+                        'city': user.city,
+                        'password' : user.password
+                    },
+                    "message": "로그인 성공!",
+                    "token": {
+                        "access": access_token,
+                        "refresh": str(refresh),
+                    },
+                },
+                status=status.HTTP_200_OK,
+                )
+            return res
+        
+        return Response({"message": "테스트 로그인 실패!"}, status=401)
+        
+        
