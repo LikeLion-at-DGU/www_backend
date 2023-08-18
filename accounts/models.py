@@ -56,3 +56,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+
+# 친구 기능을 위한 유저 Profile 모델 생성
+class Profile(models.Model):
+    # User 모델과 일대일 대응
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # 팔로잉
+    followings = models.ManyToManyField("self", related_name="followers", symmetrical=True)

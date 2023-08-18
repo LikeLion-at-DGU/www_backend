@@ -166,20 +166,24 @@ class RecordRCommentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
     
 
 
-    #3-1. 댓글을 통한 follow
+    #3-1. 댓글을 통한 follow (Profile 모델을 통한 팔로우)
     @action(methods=['POST'], detail=True)
-    def follow(self, request, pk=None, record_id=None):
-        # 현재 로그인한 사용자
-        current_user = request.user
+    def follow2(self, request, pk=None, record_id=None):
+        # 현재 로그인 한 사용자
+        user = request.user
         # 팔로우 받는 사용자
-        comment_writer = RComment.objects.get(pk=pk).writer
+        followed_user = RComment.objects.get(pk=pk).writer
 
+        is_follower = user.profile in followed_user.profile.followings.all()
+        
         # 친구 추가
-        current_user.friends.add(comment_writer)
-        comment_writer.friends.add(current_user)
-
+        if is_follower:
+            user.profile.followings.remove(followed_user.profile)
+        else:
+            user.profile.followings.add(followed_user.profile)
         return Response()
-    
+
+
 
 
 #4. 이미지 URL을 관리
